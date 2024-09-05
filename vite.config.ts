@@ -70,7 +70,33 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         plugins: [
           // visualizer({ open: true, gzipSize: true })
-        ]
+        ],
+        output: {
+          entryFileNames: 'js/[name].[hash].js',
+          chunkFileNames: 'js/[name].[hash].js',
+          assetFileNames(chunkInfo) {
+            if (/\.css$/.test(chunkInfo.name!)) {
+              return 'css/[name].[hash].[ext]'
+            }
+            if (/\.(png|jpe?g|gif|svg|webp)$/.test(chunkInfo.name!)) {
+              return 'img/[name].[hash].[ext]'
+            }
+            return 'assets/[name]-[hash][extname]'
+          },
+          manualChunks: {
+            vue: ['vue'],
+            vueRouter: ['vue-router'],
+            pinia: ['pinia'],
+            naiveUI: ['naive-ui'],
+            axios: ['axios'],
+            vicons: ['@vicons/ionicons5', '@vicons/fluent', '@vicons/material', '@vicons/antd'],
+            dayjs: ['dayjs'],
+            echarts: ['echarts'],
+            lodash: ['lodash-es'],
+            jszip: ['jszip'],
+            fileSaver: ['file-saver']
+          }
+        }
       }
     }
   }
